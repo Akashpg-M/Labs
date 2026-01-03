@@ -451,10 +451,9 @@ import React, { useState, useEffect } from "react";
 import CodeEditorWindow from "@/components/modals/CodeEditorWindow";
 import ProctorDashboard from "@/components/modals/ProctorDashboard";
 import TerminalWindow from "@/components/modals/TerminalWindow";
-
-// --- NEW GOOGLE WORKSPACE MODALS ---
 import ClassroomWindow from "@/components/modals/ClassroomWindow";
 import CalendarWindow from "@/components/modals/CalendarWindow";
+import GradeSheetWindow from "@/components/modals/GradeSheetWindow";
 
 // --- UI COMPONENTS ---
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -546,27 +545,7 @@ export default function StationModalManager({ activeStation, isOpen, onClose }: 
   }
 
   // GOOGLE SHEETS (We already handled the denial check above, so this only renders if Allowed)
-  if (activeStation.type === "sheets") {
-    return (
-      <Dialog open={isOpen} onOpenChange={(val) => !val && onClose()}>
-        <DialogContent className="bg-zinc-900 text-white border-zinc-800">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-emerald-500">
-              <Sheet className="w-5 h-5" /> Gradebook Export
-            </DialogTitle>
-            <DialogDescription className="text-zinc-400">
-              Export current game logic and student performance to Google Sheets.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-8 flex justify-center">
-            <Button className="bg-emerald-700 hover:bg-emerald-600">
-              Sync Data to Sheets
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  if (activeStation.type === "sheets") return <GradeSheetWindow isOpen={isOpen} onClose={onClose} />;
 
   // TEACHER NPC INTERACTION
   if (activeStation.type === "npc-teacher") {

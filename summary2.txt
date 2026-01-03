@@ -1,0 +1,3638 @@
+Directory structure:
+└── akashpg-m-labs/
+    ├── README.md
+    ├── components.json
+    ├── eslint.config.mjs
+    ├── next.config.ts
+    ├── package.json
+    ├── postcss.config.mjs
+    ├── tsconfig.json
+    ├── app/
+    │   ├── globals.css
+    │   ├── layout.tsx
+    │   ├── page.tsx
+    │   └── api/
+    │       ├── hint/
+    │       │   └── route.ts
+    │       └── run/
+    │           └── route.ts
+    ├── components/
+    │   ├── game/
+    │   │   ├── ChatModal.tsx
+    │   │   ├── NetVerseEngine.tsx
+    │   │   ├── Player.tsx
+    │   │   ├── Station.tsx
+    │   │   ├── StationModalManager.tsx
+    │   │   ├── Teacher.tsx
+    │   │   └── WorldMap.tsx
+    │   ├── hud/
+    │   │   ├── MiniMap.tsx
+    │   │   ├── SecurityCam.tsx
+    │   │   ├── TaskOverlay.tsx
+    │   │   └── TeacherDashboard.tsx
+    │   ├── landing/
+    │   │   └── LobbyScreen.tsx
+    │   ├── modals/
+    │   │   ├── CalendarWindow.tsx
+    │   │   ├── ClassroomWindow.tsx
+    │   │   ├── CodeEditorWindow.tsx
+    │   │   ├── GradeSheetWindow.tsx
+    │   │   ├── ProctorDashboard.tsx
+    │   │   └── TerminalWindow.tsx
+    │   ├── providers/
+    │   │   └── AuthProvider.tsx
+    │   └── ui/
+    │       ├── badge.tsx
+    │       ├── button.tsx
+    │       ├── card.tsx
+    │       ├── dialog.tsx
+    │       ├── input.tsx
+    │       ├── sonner.tsx
+    │       └── tabs.tsx
+    ├── hooks/
+    │   ├── useChat.ts
+    │   └── useMultiplayer.ts
+    └── lib/
+        ├── cloud-shell-api.ts
+        ├── firebase.ts
+        ├── game-config.ts
+        ├── google-workspace.ts
+        ├── types.ts
+        ├── useSpriteAnimator.ts
+        └── utils.ts
+
+
+================================================
+FILE: components.json
+================================================
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {}
+}
+
+
+
+================================================
+FILE: eslint.config.mjs
+================================================
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+
+
+
+================================================
+FILE: next.config.ts
+================================================
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+};
+
+export default nextConfig;
+
+
+
+================================================
+FILE: package.json
+================================================
+{
+  "name": "metaverse-lab",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@monaco-editor/react": "^4.7.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "firebase": "^12.7.0",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.23.26",
+    "next": "16.1.0",
+    "next-themes": "^0.4.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5"
+  }
+}
+
+
+
+================================================
+FILE: postcss.config.mjs
+================================================
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+
+
+
+================================================
+FILE: tsconfig.json
+================================================
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+
+
+================================================
+FILE: app/globals.css
+================================================
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+.pixelated {
+  image-rendering: pixelated; /* Chrome/Edge */
+  image-rendering: crisp-edges; /* Firefox */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+
+================================================
+FILE: app/layout.tsx
+================================================
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+// ✅ CRITICAL FIX: Use Default Import (No curly braces)
+import AuthProvider from "@/components/providers/AuthProvider";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "NetVerse Labs",
+  description: "A Metaverse for Coders",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
+
+
+================================================
+FILE: app/page.tsx
+================================================
+"use client";
+
+import { useState } from "react";
+import LobbyScreen from "@/components/landing/LobbyScreen";
+import NetVerseEngine from "@/components/game/NetVerseEngine";
+
+export default function Home() {
+  const [isGameActive, setIsGameActive] = useState(false);
+  const [userData, setUserData] = useState({ name: "Student", role: "student" });
+
+  const handleJoin = (name: string, role: string) => {
+    setUserData({ name, role });
+    setIsGameActive(true); // <--- Triggers the screen swap
+  };
+
+  return (
+    <main className="min-h-screen bg-black">
+      {!isGameActive ? (
+        <LobbyScreen onJoin={handleJoin} />
+      ) : (
+        // Pass the captured name to the engine
+        <NetVerseEngine username={userData.name} />
+      )}
+    </main>
+  );
+}
+
+
+================================================
+FILE: app/api/hint/route.ts
+================================================
+import { NextResponse } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+
+export async function POST(req: Request) {
+  try {
+    const { code, error } = await req.json();
+
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const prompt = `
+      You are a helpful Teaching Assistant for a computer science student.
+      The student has the following code:
+      ${code}
+
+      They received this output/error:
+      ${error}
+
+      Please provide a SHORT, one-sentence hint on how to fix it. Do not give the full answer code.
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const hint = response.text();
+
+    return NextResponse.json({ hint });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ hint: "AI is currently offline." }, { status: 500 });
+  }
+}
+
+
+================================================
+FILE: app/api/run/route.ts
+================================================
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  try {
+    // 1. Get the code and language from the frontend
+    const { code, language } = await req.json();
+
+    // 2. Point to your Custom Express Backend (via ngrok)
+    const BACKEND_URL = "http://unthrown-clemently-isabella.ngrok-free.dev/execute";
+
+    // 3. Send the request to the backend
+    // Your Express server expects JSON: { "code": "...", "language": "..." }
+    const response = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: code,
+        language: language, 
+      }),
+    });
+
+    // 4. Get the result
+    // Your Express server returns: { output, isError, executionTime }
+    const result = await response.json();
+
+    // 5. Return it to the frontend
+    if (response.ok) {
+        return NextResponse.json(result);
+    } else {
+        // Handle cases where the Express server returns a 400/500 error explicitly
+        return NextResponse.json(
+            { output: result.output || "Execution failed.", isError: true }, 
+            { status: response.status }
+        );
+    }
+
+  } catch (error) {
+    console.error("Proxy Error:", error);
+    return NextResponse.json(
+        { output: "Internal Server Error: Could not reach the execution engine." }, 
+        { status: 500 }
+    );
+  }
+}
+
+
+================================================
+FILE: components/game/ChatModal.tsx
+================================================
+import React, { useState, useEffect, useRef } from "react";
+import { useChat } from "@/hooks/useChat";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { X, Send } from "lucide-react";
+
+interface ChatModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  chatId: string;
+  myUsername: string;
+  partnerName: string;
+}
+
+export default function ChatModal({ isOpen, onClose, chatId, myUsername, partnerName }: ChatModalProps) {
+  const { messages, sendMessage } = useChat(chatId);
+  const [inputText, setInputText] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isOpen]);
+
+  const handleSend = () => {
+    sendMessage(myUsername, inputText);
+    setInputText("");
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50 w-80 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden flex flex-col h-96 animate-in slide-in-from-right-10">
+      
+      {/* Header */}
+      <div className="bg-slate-800 p-3 flex justify-between items-center border-b border-slate-700">
+        <div className="flex items-center gap-2">
+           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+           <span className="font-bold text-white text-sm">Chat with {partnerName}</span>
+        </div>
+        <button onClick={onClose} className="text-slate-400 hover:text-white">
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-950/50">
+        {messages.map((msg) => {
+          const isMe = msg.senderName === myUsername;
+          return (
+            <div key={msg.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
+               <span className="text-[10px] text-slate-500 mb-0.5">{msg.senderName}</span>
+               <div className={`px-3 py-2 rounded-lg text-sm max-w-[85%] break-words ${isMe ? "bg-blue-600 text-white rounded-br-none" : "bg-slate-700 text-slate-200 rounded-bl-none"}`}>
+                 {msg.text}
+               </div>
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input Area */}
+      <div className="p-3 bg-slate-800 border-t border-slate-700 flex gap-2">
+        <Input 
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          placeholder="Type a message..."
+          className="bg-slate-900 border-slate-600 text-white h-9 text-xs"
+        />
+        <Button size="icon" onClick={handleSend} className="h-9 w-9 bg-blue-600 hover:bg-blue-500">
+          <Send className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/game/NetVerseEngine.tsx
+================================================
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { GAME_CONFIG, STATIONS, GameStation, isTeacher } from "@/lib/game-config"; 
+
+// --- COMPONENTS ---
+import Player from "./Player";
+import Station from "./Station";
+import WorldMap from "./WorldMap";
+import StationModalManager from "./StationModalManager";
+import MiniMap from "@/components/hud/MiniMap";
+import ChatModal from "./ChatModal"; 
+import Teacher from "./Teacher"; 
+import TeacherDashboard from "@/components/hud/TeacherDashboard"; 
+
+import { RemotePlayer, useMultiplayer } from "@/hooks/useMultiplayer";
+import { useAuth } from "../providers/AuthProvider";
+
+// --- FIREBASE IMPORTS ---
+import { ref, set, onDisconnect } from "firebase/database";
+import { db } from "@/lib/firebase";
+import { Loader2 } from "lucide-react";
+
+export default function NetVerseEngine({ username }: { username: string }) {
+  
+  const { user, loading } = useAuth();
+  
+  // RBAC Check
+  const amITeacher = isTeacher(user?.email);
+
+  const getChatId = (uid1: string, uid2: string) => {
+    return [uid1, uid2].sort().join("_"); 
+  };
+
+  // --- 1. STATE ---
+  // Initial position (Teachers spawn near desk, students at entrance)
+  const [pos, setPos] = useState({ x: amITeacher ? 2100 : 1200, y: amITeacher ? 1350 : 1500 });
+  const [facing, setFacing] = useState<'left' | 'right' | 'up' | 'down'>('down');
+  const [isMoving, setIsMoving] = useState(false);
+  
+  // Interaction State
+  const [activeStation, setActiveStation] = useState<GameStation | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // Chat State
+  const [closestPlayer, setClosestPlayer] = useState<RemotePlayer | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [currentChatId, setCurrentChatId] = useState<string>("");
+
+  // Multiplayer Hook
+  const { otherPlayers } = useMultiplayer("campus-lobby", pos, facing, isMoving);
+
+  // --- 2. TEACHER STATUS BROADCAST (Modified) ---
+  // We removed the code that forced position. Now we just broadcast status.
+  useEffect(() => {
+    if (!loading && amITeacher && user) {
+        console.log("🎓 RBAC: Teacher Mode Activated for", user.email);
+        
+        // Broadcast Online Status
+        const statusRef = ref(db, "game_state/professor_status");
+        set(statusRef, "online");
+        onDisconnect(statusRef).set("offline");
+    }
+  }, [loading, amITeacher, user]);
+
+  // --- 3. GAME LOOP ---
+  useEffect(() => {
+    if (loading) return; 
+
+    let animationFrameId: number;
+    const keysPressed = new Set<string>();
+
+    const handleKeyDown = (e: KeyboardEvent) => keysPressed.add(e.key);
+    const handleKeyUp = (e: KeyboardEvent) => keysPressed.delete(e.key);
+    const handleBlur = () => { keysPressed.clear(); setIsMoving(false); };
+
+    const gameLoop = () => {
+      if (isDialogOpen) return; 
+
+      // ✅ UNLOCKED MOVEMENT (Everyone can move now)
+      const moving = keysPressed.size > 0;
+      setIsMoving(moving);
+
+      setPos((prev) => {
+        let { x, y } = prev;
+        const speed = GAME_CONFIG.playerSpeed; // You can make teachers faster here if you want: amITeacher ? 16 : 12
+        if (keysPressed.has("ArrowUp") || keysPressed.has("w")) { y -= speed; setFacing('up'); }
+        if (keysPressed.has("ArrowDown") || keysPressed.has("s")) { y += speed; setFacing('down'); }
+        if (keysPressed.has("ArrowLeft") || keysPressed.has("a")) { x -= speed; setFacing("left"); }
+        if (keysPressed.has("ArrowRight") || keysPressed.has("d")) { x += speed; setFacing("right"); }
+        return {
+          x: Math.max(GAME_CONFIG.playerSize, Math.min(x, GAME_CONFIG.mapWidth - GAME_CONFIG.playerSize)),
+          y: Math.max(GAME_CONFIG.playerSize, Math.min(y, GAME_CONFIG.mapHeight - GAME_CONFIG.playerSize)),
+        };
+      });
+
+      // Find Closest Player
+      let closest: RemotePlayer | null = null;
+      let minDist = 100; 
+      for (const p of otherPlayers) {
+        const dist = Math.hypot(p.x - pos.x, p.y - pos.y);
+        if (dist < minDist) { minDist = dist; closest = p; }
+      }
+      setClosestPlayer(closest);
+
+      // Chat Trigger
+      if (keysPressed.has("e") && closest && !isChatOpen && user) {
+        setCurrentChatId(getChatId(user.uid, closest.id));
+        setIsChatOpen(true);
+        keysPressed.delete("e"); 
+      }
+
+      // Station Logic
+      const nearby = STATIONS.find((s) => {
+        const dx = Math.abs(pos.x - s.x);
+        const dy = Math.abs(pos.y - s.y);
+        return dx < (s.interactionRadius || 80) && dy < (s.interactionRadius || 80); 
+      });
+      setActiveStation(nearby || null);
+
+      if (keysPressed.has("Enter") && nearby) {
+        setIsDialogOpen(true);
+        keysPressed.delete("Enter");
+      }
+
+      animationFrameId = requestAnimationFrame(gameLoop);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("blur", handleBlur);
+    animationFrameId = requestAnimationFrame(gameLoop);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("blur", handleBlur);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [pos, isDialogOpen, isChatOpen, otherPlayers, user, amITeacher, loading]); 
+
+  // ✅ 4. LOADING SCREEN
+  if (loading) {
+    return (
+      <div className="h-screen w-screen bg-black flex flex-col items-center justify-center text-white gap-4">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+        <p className="text-zinc-400 text-sm animate-pulse">Authenticating Identity...</p>
+      </div>
+    );
+  }
+
+  // ✅ 5. MAIN RENDER
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-black overflow-hidden relative">
+      
+      {/* HUD Layer */}
+      <div className="absolute top-4 left-4 z-50">
+        <h1 className="text-white font-bold text-xl tracking-widest">NETVERSE <span className="text-blue-500">LABS</span></h1>
+        <div className="flex items-center gap-2 text-slate-400 text-xs mt-1">
+          <div className={`w-2 h-2 rounded-full animate-pulse ${amITeacher ? 'bg-yellow-500' : 'bg-green-500'}`}/>
+          Logged in as {username} {amITeacher && <span className="text-yellow-400 font-bold">(PROFESSOR)</span>}
+        </div>
+      </div>
+
+      {/* Interaction Prompts */}
+      {closestPlayer && !isChatOpen && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+          <div className="bg-black/80 text-white px-4 py-2 rounded-full border border-white/20 shadow-blue-900/50 shadow-lg flex items-center gap-2">
+            <span className="bg-white text-black w-5 h-5 flex items-center justify-center rounded text-xs font-bold">E</span>
+            <span className="text-sm font-medium">Chat with {closestPlayer.username}</span>
+          </div>
+        </div>
+      )}
+
+      {activeStation && !isDialogOpen && (
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+          <div className="bg-black/90 text-white px-6 py-3 rounded-full border border-yellow-500/50 shadow-yellow-500/20 shadow-lg flex items-center gap-3">
+            <span className="bg-yellow-500 text-black w-6 h-6 flex items-center justify-center rounded text-xs font-bold">↵</span>
+            <span className="text-sm font-bold tracking-wide">
+              {activeStation.type === 'npc-teacher' ? "Talk to Professor" : `Open ${activeStation.label}`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <MiniMap playerPos={pos} />
+
+      {/* Game Viewport */}
+      <div 
+        className="relative overflow-hidden bg-slate-900 border-4 border-slate-800 rounded-xl shadow-2xl"
+        style={{ width: GAME_CONFIG.viewportWidth, height: GAME_CONFIG.viewportHeight }}
+      >
+        <motion.div
+          className="absolute origin-top-left"
+          animate={{
+            x: -pos.x + GAME_CONFIG.viewportWidth / 2,
+            y: -pos.y + GAME_CONFIG.viewportHeight / 2,
+          }}
+          transition={{ type: "tween", ease: "linear", duration: 0 }} 
+          style={{ width: GAME_CONFIG.mapWidth, height: GAME_CONFIG.mapHeight }}
+        >
+          <WorldMap />
+
+          {/* Other Players */}
+          {otherPlayers.map((p) => (
+            <Player 
+              key={p.id}
+              pos={{ x: p.x, y: p.y }}
+              facing={p.facing}
+              isMoving={p.isMoving}
+              username={p.username}
+            />
+          ))}
+
+          {/* Stations (Hide Professor NPC if I AM the professor) */}
+          {STATIONS.filter(s => s.type !== "npc-teacher").map((station) => (
+            <Station key={station.id} station={station} isActive={activeStation?.id === station.id} />
+          ))}
+
+          {/* Render Teacher NPC (Only if I am NOT the teacher) */}
+          {!amITeacher && STATIONS.filter(s => s.type === "npc-teacher").map(npc => (
+            <Teacher 
+                key={npc.id}
+                x={npc.x}
+                y={npc.y}
+                label={npc.label}
+                status="online" 
+            />
+          ))}
+
+          {/* My Player */}
+          <Player pos={pos} facing={facing} username={username} isMoving={isMoving} />
+
+        </motion.div>
+      </div>
+
+      <StationModalManager 
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        activeStation={activeStation}
+      />
+
+      {user && closestPlayer && (
+        <ChatModal 
+          isOpen={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+          chatId={currentChatId}
+          myUsername={username}
+          partnerName={closestPlayer ? closestPlayer.username : "Student"}
+        />
+      )}
+
+      {/* TEACHER DASHBOARD (Only visible if RBAC confirms teacher) */}
+      {amITeacher && <TeacherDashboard />}
+
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/game/Player.tsx
+================================================
+import React from "react";
+import { motion } from "framer-motion";
+import { GAME_CONFIG } from "@/lib/game-config";
+
+interface PlayerProps {
+  pos: { x: number; y: number };
+  facing: 'left' | 'right' | 'up' | 'down';
+  isMoving: boolean;
+  username: string;
+}
+
+export default function Player({ pos, facing, isMoving, username }: PlayerProps) {
+  
+  // 1. Map directions to your specific files
+  const spriteMap = {
+    left: "/characters/student-left-removebg.png",
+    right: "/characters/student-right-removebg.png",
+    up: "/characters/student-up-removebg.png",     // Fallback to right if you lack this
+    down: "/characters/student-down-removebg.png", // Fallback to left if you lack this
+  };
+
+  return (
+    <motion.div
+className="absolute flex flex-col items-center justify-center z-20 w-16 h-16 -ml-4 -mt-8"      animate={{ x: pos.x, y: pos.y }}
+      transition={{ 
+        type: "tween", 
+        ease: "linear", 
+        duration: isMoving ? 0.1 : 0 // Smooth interpolation when moving
+      }}
+      style={{
+        zIndex: 20,
+        // width: GAME_CONFIG.playerSize,   // e.g., 32px
+        // height: GAME_CONFIG.playerSize,  // e.g., 32px
+      }}
+    >
+      {/* 2. The Character Sprite */}
+      <img 
+        src={spriteMap[facing]} 
+        alt="Player"
+        className="w-16 h-16 object-contain pixelated" 
+        // 'pixelated' ensures crisp edges for pixel art (add to global css if needed)
+      />
+
+      {/* 3. Username Label (Floating above head) */}
+      <div className="absolute -top-6 bg-black/50 px-2 py-0.5 rounded text-[10px] text-white whitespace-nowrap backdrop-blur-sm">
+        {username}
+      </div>
+
+    </motion.div>
+  );
+}
+
+
+================================================
+FILE: components/game/Station.tsx
+================================================
+"use client";
+
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { GameStation } from "@/lib/game-config";
+
+interface StationProps {
+  station: GameStation;
+  isActive: boolean;
+}
+
+export default function Station({ station, isActive }: StationProps) {
+  return (
+    <div
+      className="absolute flex flex-col items-center justify-center transition-all duration-200"
+      style={{
+        left: station.x - 40, // Centering offset (half of width)
+        top: station.y - 40,
+        zIndex: station.y // Y-Sorting (things lower on screen cover things higher)
+      }}
+    >
+      {/* Interaction Prompt (Bouncing Badge) */}
+      <div className={`
+          absolute -top-12 z-50 transition-all duration-300
+          ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
+      `}>
+        <Badge className="bg-yellow-400 text-black font-bold border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-bounce">
+          PRESS ENTER
+        </Badge>
+      </div>
+
+      {/* The Visual Object */}
+      <div className={`
+        w-20 h-20 rounded-lg shadow-xl border-2 border-black flex items-center justify-center transition-all
+        ${station.color} 
+        ${isActive ? 'scale-110 ring-4 ring-white brightness-110' : 'opacity-90'}
+      `}>
+        <station.icon className="text-white w-8 h-8 drop-shadow-md" />
+      </div>
+
+      {/* Label */}
+      <span className="mt-2 text-[10px] font-bold text-slate-200 bg-black/80 px-2 py-1 rounded border border-white/10">
+        {station.label}
+      </span>
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/game/StationModalManager.tsx
+================================================
+
+"use client";
+
+import React, { useState, useEffect } from "react";
+
+// --- EXISTING MODALS ---
+import CodeEditorWindow from "@/components/modals/CodeEditorWindow";
+import ProctorDashboard from "@/components/modals/ProctorDashboard";
+import TerminalWindow from "@/components/modals/TerminalWindow";
+
+// --- NEW GOOGLE WORKSPACE MODALS ---
+import ClassroomWindow from "@/components/modals/ClassroomWindow";
+import CalendarWindow from "@/components/modals/CalendarWindow";
+
+// --- UI COMPONENTS ---
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Coffee, Send, Wifi, WifiOff, MessageCircle, Sheet } from "lucide-react";
+import { toast } from "sonner";
+
+// --- LOGIC & CONFIG ---
+import { GameStation, isTeacher } from "@/lib/game-config";
+import { push, ref as dbRef, onValue, query, orderByChild, equalTo } from "firebase/database";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/components/providers/AuthProvider";
+
+interface ModalManagerProps {
+  activeStation: GameStation | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function StationModalManager({ activeStation, isOpen, onClose }: ModalManagerProps) {
+  const { user } = useAuth();
+
+  // --- TEACHER NPC STATE ---
+  const [doubt, setDoubt] = useState("");
+  const [realTimeStatus, setRealTimeStatus] = useState<"online" | "offline">("offline");
+  const [myHistory, setMyHistory] = useState<any[]>([]);
+
+  // --- 1. HANDLE RBAC SECURITY CHECKS (The Fix) ---
+  // We check permission here, but perform the 'closing' action inside useEffect
+  const isSheetAccessDenied = activeStation?.type === "sheets" && !isTeacher(user?.email);
+
+  useEffect(() => {
+    if (isOpen && isSheetAccessDenied) {
+      // This now runs safely AFTER the component renders
+      toast.error("⛔ ACCESS DENIED: Faculty clearance required.");
+      onClose();
+    }
+  }, [isOpen, isSheetAccessDenied, onClose]);
+
+  // --- TEACHER NPC EFFECT ---
+  useEffect(() => {
+    if (activeStation?.type === "npc-teacher" && user) {
+      const statusRef = dbRef(db, "game_state/professor_status");
+      const unsubStatus = onValue(statusRef, (s) => setRealTimeStatus(s.val() === "online" ? "online" : "offline"));
+
+      const myDoubtsRef = query(dbRef(db, "doubts"), orderByChild("studentId"), equalTo(user.uid));
+      const unsubDoubts = onValue(myDoubtsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const list = Object.values(data).sort((a: any, b: any) => b.timestamp - a.timestamp);
+          setMyHistory(list);
+        } else {
+          setMyHistory([]);
+        }
+      });
+
+      return () => { unsubStatus(); unsubDoubts(); };
+    }
+  }, [activeStation, user]);
+
+  // If modal is closed or station is null, render nothing
+  if (!activeStation || !isOpen) return null;
+
+  // If access is denied, render nothing (the useEffect above will close the window)
+  if (isSheetAccessDenied) return null;
+
+  // =========================================================
+  // 2. RENDER STATIONS
+  // =========================================================
+
+  if (activeStation.type === "security") {
+    return <ProctorDashboard isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (activeStation.type === "exam" || activeStation.type === "dev" || activeStation.type === "code-editor") {
+    return <CodeEditorWindow isOpen={isOpen} onClose={onClose} station={activeStation} />;
+  }
+
+  if (activeStation.type === "server") {
+    return <TerminalWindow isOpen={isOpen} onClose={onClose} stationName={activeStation.label} stationId={activeStation.id} />;
+  }
+
+  if (activeStation.type === "classroom") {
+    return <ClassroomWindow isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (activeStation.type === "calendar") {
+    return <CalendarWindow isOpen={isOpen} onClose={onClose} />;
+  }
+
+  // GOOGLE SHEETS (We already handled the denial check above, so this only renders if Allowed)
+  if (activeStation.type === "sheets") {
+    return (
+      <Dialog open={isOpen} onOpenChange={(val) => !val && onClose()}>
+        <DialogContent className="bg-zinc-900 text-white border-zinc-800">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-emerald-500">
+              <Sheet className="w-5 h-5" /> Gradebook Export
+            </DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Export current game logic and student performance to Google Sheets.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-8 flex justify-center">
+            <Button className="bg-emerald-700 hover:bg-emerald-600">
+              Sync Data to Sheets
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // TEACHER NPC INTERACTION
+  if (activeStation.type === "npc-teacher") {
+    const handleSendDoubt = async () => {
+      if (!doubt.trim() || !user) return;
+      try {
+        await push(dbRef(db, "doubts"), {
+          studentName: user.displayName || "Student",
+          studentId: user.uid,
+          text: doubt,
+          timestamp: Date.now(),
+          status: "pending"
+        });
+        toast.success("Sent to Professor!");
+        setDoubt("");
+      } catch (e) { toast.error("Failed to send."); }
+    };
+
+    const isOnline = realTimeStatus === "online";
+
+    return (
+      <Dialog open={isOpen} onOpenChange={(val) => !val && onClose()}>
+        <DialogContent className="sm:max-w-lg bg-zinc-900 border-zinc-700 text-white shadow-2xl h-[600px] flex flex-col" aria-describedby="teacher-desc">
+          
+          <DialogHeader>
+             <DialogTitle className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center border-2 border-yellow-500 overflow-hidden shrink-0">
+                    <img src="/characters/teacher.png" className="w-full h-full object-cover" onError={(e) => e.currentTarget.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Professor&clothing=blazerAndShirt"} />
+                </div>
+                <div>
+                    <span className="text-xl font-bold text-yellow-400 block">{activeStation.label}</span>
+                    <span className="text-xs text-zinc-400 uppercase tracking-widest font-normal flex items-center gap-1">
+                        {isOnline ? <><Wifi className="w-3 h-3 text-green-500"/><span className="text-green-400">Online</span></> : <><WifiOff className="w-3 h-3 text-red-500"/><span className="text-red-400">Offline</span></>}
+                    </span>
+                </div>
+             </DialogTitle>
+             <DialogDescription id="teacher-desc" className="sr-only">Ask doubts</DialogDescription>
+          </DialogHeader>
+
+          <div className="flex-1 flex flex-col gap-4 mt-2 overflow-hidden">
+            <div className="shrink-0 space-y-2">
+                <textarea 
+                    value={doubt}
+                    onChange={(e) => setDoubt(e.target.value)}
+                    placeholder="Type your doubt here..."
+                    className="w-full h-20 bg-black/50 border border-zinc-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-yellow-500 resize-none"
+                />
+                <div className="flex justify-end">
+                  <Button onClick={handleSendDoubt} disabled={!doubt.trim()} size="sm" className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold">
+                    <Send className="w-3 h-3 mr-2" /> Ask Professor
+                  </Button>
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-hidden flex flex-col bg-zinc-950/30 rounded-lg border border-zinc-800">
+               <div className="p-2 bg-zinc-800/50 text-xs font-bold text-zinc-400 uppercase flex items-center gap-2">
+                  <MessageCircle className="w-3 h-3" /> Your Previous Doubts
+               </div>
+               <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                  {myHistory.length === 0 ? (
+                    <p className="text-zinc-600 text-xs text-center mt-10">No history yet.</p>
+                  ) : (
+                    myHistory.map((item, i) => (
+                      <div key={i} className="flex flex-col gap-2">
+                          <div className="self-end bg-blue-900/20 border border-blue-900/50 rounded-lg rounded-tr-none p-2 max-w-[85%]">
+                             <p className="text-sm text-blue-100">{item.text}</p>
+                             <span className="text-[10px] text-blue-400/60 block mt-1 text-right">{new Date(item.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                          </div>
+                          {item.status === 'resolved' && item.answer ? (
+                             <div className="self-start bg-yellow-900/20 border border-yellow-900/50 rounded-lg rounded-tl-none p-2 max-w-[90%]">
+                                <p className="text-xs text-yellow-500 font-bold mb-1">Professor Byte:</p>
+                                <p className="text-sm text-yellow-100/90">{item.answer}</p>
+                             </div>
+                          ) : (
+                             <div className="self-end text-[10px] text-zinc-500 italic pr-1">Waiting for reply...</div>
+                          )}
+                      </div>
+                    ))
+                  )}
+               </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  if (activeStation.type === "common" || activeStation.type === "social") {
+    return (
+      <Dialog open={isOpen} onOpenChange={(val) => !val && onClose()}>
+        <DialogContent className="sm:max-w-md bg-zinc-900 border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl"><Coffee className="text-orange-400" /> {activeStation.label}</DialogTitle>
+            <DialogDescription className="text-zinc-400">Relax zone.</DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end"><Button onClick={onClose} variant="secondary">Back</Button></div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return null;
+}
+
+
+================================================
+FILE: components/game/Teacher.tsx
+================================================
+import React from "react";
+import { motion } from "framer-motion";
+
+interface TeacherProps {
+  x: number;
+  y: number;
+  label: string;
+  status?: "online" | "available" | "offline";
+}
+
+// ⚠️ IMPORTANT: Must be 'export default'
+export default function Teacher({ x, y, label, status = "offline" }: TeacherProps) {
+  const statusColors: Record<string, string> = {
+    online: "bg-blue-500 shadow-blue-500/50",
+    available: "bg-green-500 shadow-green-500/50",
+    offline: "bg-zinc-500 shadow-zinc-500/50",
+  };
+
+  return (
+    <motion.div
+      className="absolute flex flex-col items-center justify-center z-10 w-16 h-16 -ml-4 -mt-8"
+      initial={{ x, y }}
+      animate={{ y: [y, y - 4, y] }}
+      transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+    >
+      <div className={`absolute -top-10 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/80 border border-white/10 backdrop-blur-md`}>
+        <div className={`w-2 h-2 rounded-full shadow-[0_0_8px] ${statusColors[status] || statusColors.offline} animate-pulse`} />
+        <span className="text-[8px] text-white font-bold uppercase tracking-wide">
+          {status === 'available' ? "Accepting Doubts" : status}
+        </span>
+      </div>
+
+      <img 
+        src="/characters/teacher.png" 
+        alt="Professor"
+        className="w-full h-full object-contain pixelated drop-shadow-md" 
+        onError={(e) => { e.currentTarget.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Professor&clothing=blazerAndShirt"; }}
+      />
+
+      <div className="absolute -top-4 bg-yellow-600/90 border border-yellow-400 px-2 py-0.5 rounded text-[10px] text-white font-bold whitespace-nowrap shadow-lg z-20">
+        {label}
+      </div>
+    </motion.div>
+  );
+}
+
+
+================================================
+FILE: components/game/WorldMap.tsx
+================================================
+
+"use client";
+
+import React from "react";
+import Image from "next/image"; 
+import { GAME_CONFIG } from "@/lib/game-config";
+
+export default function WorldMap() {
+  return (
+    <div 
+      className="absolute inset-0 bg-slate-950"
+      style={{ width: GAME_CONFIG.mapWidth, height: GAME_CONFIG.mapHeight }}
+    >
+      {/* 1. THE PIXEL ART MAP */}
+      {/* The 'pixelated' class ensures it stays sharp and doesn't get blurry */}
+      <Image 
+        src="/maps/lab-map-final2.jpeg" 
+        alt="NetVerse Campus"
+        fill
+        className="object-cover pixelated" 
+        priority
+      />
+
+      {/* 2. OPTIONAL: VISUAL DEBUGGER */}
+      {/* These colored boxes show where the CODE thinks the zones are. */}
+      {/* If your drawing doesn't match these boxes, adjust coordinates in game-config.ts */}
+      {/* Once everything aligns, you can delete this entire div. */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        {/* Exam Hall Area Check */}
+        <div className="absolute top-[640px] left-[640px] w-20 h-20 border-4 border-blue-500" />
+        
+        {/* Server Farm Area Check */}
+        <div className="absolute top-[480px] left-[2240px] w-20 h-20 border-4 border-red-500" />
+        
+        {/* Cafeteria Area Check */}
+        <div className="absolute top-[1280px] left-[1184px] w-20 h-20 border-4 border-green-500" />
+      </div>
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/hud/MiniMap.tsx
+================================================
+"use client";
+
+import React from "react";
+import { GAME_CONFIG, STATIONS } from "@/lib/game-config";
+
+interface MiniMapProps {
+  playerPos: { x: number; y: number };
+}
+
+export default function MiniMap({ playerPos }: MiniMapProps) {
+  // 1. Calculate the Scale Factor
+  // We want the MiniMap to be fixed width (e.g., 240px)
+  const MINI_WIDTH = 240;
+  const scale = MINI_WIDTH / GAME_CONFIG.mapWidth;
+  const MINI_HEIGHT = GAME_CONFIG.mapHeight * scale;
+
+  return (
+    <div 
+      className="absolute bottom-6 right-6 z-50 bg-black/80 border-2 border-slate-600 rounded-lg shadow-2xl overflow-hidden backdrop-blur-sm"
+      style={{ width: MINI_WIDTH, height: MINI_HEIGHT }}
+    >
+      {/* MAP TITLE */}
+      <div className="absolute top-0 left-0 bg-slate-800/80 text-[8px] text-white px-1.5 py-0.5 rounded-br">
+        SECTOR MAP
+      </div>
+
+      {/* 2. RENDER STATIC STATIONS (The dots) */}
+      {STATIONS.map((station) => (
+       <div
+  key={station.id}
+  className="absolute w-1.5 h-1.5 rounded-full"
+  style={{
+    left: station.x * scale,
+    top: station.y * scale,
+    // Fix: Fallback to gray string if color is missing
+    backgroundColor: (station.color || "").includes('red') ? '#ef4444' : 
+                     (station.color || "").includes('blue') ? '#3b82f6' : 
+                     (station.color || "").includes('yellow') ? '#eab308' : '#22c55e'
+  }}
+/>
+      ))}
+
+      {/* 3. RENDER THE PLAYER (Blinking Dot) */}
+      <div
+        className="absolute w-2.5 h-2.5 bg-yellow-400 rounded-full border border-white shadow-[0_0_8px_rgba(250,204,21,0.8)] z-10"
+        style={{
+          left: playerPos.x * scale - 1.25, // Centered
+          top: playerPos.y * scale - 1.25,
+        }}
+      />
+
+      {/* 4. RENDER THE CAMERA VIEWPORT (The Box showing what you see) */}
+      <div 
+        className="absolute border border-white/30 bg-white/5 pointer-events-none"
+        style={{
+          width: GAME_CONFIG.viewportWidth * scale,
+          height: GAME_CONFIG.viewportHeight * scale,
+          left: (playerPos.x - GAME_CONFIG.viewportWidth / 2) * scale,
+          top: (playerPos.y - GAME_CONFIG.viewportHeight / 2) * scale,
+        }}
+      />
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/hud/SecurityCam.tsx
+================================================
+[Empty file]
+
+
+================================================
+FILE: components/hud/TaskOverlay.tsx
+================================================
+"use client";
+
+import { CheckCircle2, Circle, AlertCircle } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
+export default function TaskOverlay() {
+  // Mock Data - In real app, this comes from your backend/state
+  const tasks = [
+    { id: 1, text: "Locate the Mainframe", completed: true },
+    { id: 2, text: "Access Terminal & fix Nginx", completed: false },
+    { id: 3, text: "Verify connection speed", completed: false },
+  ];
+
+  const currentTask = tasks.find(t => !t.completed);
+
+  return (
+    <div className="absolute top-4 right-4 z-50 w-80">
+      <Card className="bg-slate-900/90 border-slate-700 text-slate-100 p-4 shadow-xl backdrop-blur-md">
+        
+        {/* Header */}
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="font-bold text-yellow-400 text-sm tracking-wider flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            CURRENT OBJECTIVE
+          </h3>
+          <Badge variant="outline" className="border-yellow-500/50 text-yellow-500 text-[10px]">
+            LAB-04
+          </Badge>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-full bg-slate-800 h-1.5 rounded-full mb-4 overflow-hidden">
+          <div 
+            className="bg-green-500 h-full transition-all duration-500" 
+            style={{ width: '33%' }} 
+          />
+        </div>
+
+        {/* Task List */}
+        <div className="space-y-3">
+          {tasks.map((task) => (
+            <div key={task.id} className={`flex items-start gap-3 text-sm ${task.completed ? 'opacity-40' : 'opacity-100'}`}>
+              {task.completed ? (
+                <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+              ) : (
+                <Circle className="w-5 h-5 text-slate-500 shrink-0" />
+              )}
+              <span className={task.completed ? "line-through" : "font-medium"}>
+                {task.text}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Hint Footer */}
+        {currentTask && (
+          <div className="mt-4 pt-3 border-t border-slate-700/50 text-xs text-slate-400 italic">
+            Tip: Walk to the server room in the East Wing.
+          </div>
+        )}
+
+      </Card>
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/hud/TeacherDashboard.tsx
+================================================
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { User, MessageSquareReply, X, Send } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { ref, onValue, update } from "firebase/database";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+interface Doubt {
+  id: string;
+  studentName: string;
+  text: string;
+  timestamp: number;
+  status: "pending" | "resolved";
+  answer?: string; // New field
+}
+
+export default function TeacherDashboard() {
+  const [doubts, setDoubts] = useState<Doubt[]>([]);
+  
+  // Reply State
+  const [replyText, setReplyText] = useState("");
+  const [selectedDoubt, setSelectedDoubt] = useState<Doubt | null>(null);
+
+  useEffect(() => {
+    // Listen to ALL doubts
+    const doubtsRef = ref(db, "doubts");
+    const unsubscribe = onValue(doubtsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const list = Object.entries(data)
+          .map(([key, val]: [string, any]) => ({ id: key, ...val }))
+          // Sort: Pending first, then by time
+          .sort((a: any, b: any) => b.timestamp - a.timestamp); 
+        setDoubts(list);
+      } else {
+        setDoubts([]);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleReply = async () => {
+    if (!selectedDoubt || !replyText.trim()) return;
+
+    try {
+      // Update Firebase instead of removing
+      const doubtRef = ref(db, `doubts/${selectedDoubt.id}`);
+      await update(doubtRef, {
+        status: "resolved",
+        answer: replyText,
+        resolvedAt: Date.now()
+      });
+
+      toast.success(`Replied to ${selectedDoubt.studentName}!`);
+      setReplyText("");
+      setSelectedDoubt(null);
+    } catch (err: any) {
+      toast.error("Failed to send reply");
+    }
+  };
+
+  return (
+    <>
+      <div className="absolute right-4 top-20 w-80 bg-zinc-900/95 border border-yellow-500/30 rounded-xl shadow-2xl backdrop-blur-md overflow-hidden flex flex-col max-h-[70vh] z-50">
+        <div className="bg-yellow-600/20 p-4 border-b border-yellow-500/20 flex justify-between items-center">
+          <h3 className="text-yellow-400 font-bold flex items-center gap-2">
+            <User className="w-4 h-4" /> Professor Dashboard
+          </h3>
+          <span className="text-[10px] bg-yellow-500/20 text-yellow-200 px-2 py-0.5 rounded-full border border-yellow-500/30">
+            {doubts.filter(d => d.status === 'pending').length} Pending
+          </span>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-2 space-y-2">
+          {doubts.length === 0 ? (
+            <div className="text-zinc-500 text-xs text-center py-8 italic">No active doubts.</div>
+          ) : (
+            doubts.map((doubt) => (
+              <div 
+                key={doubt.id} 
+                className={`p-3 rounded-lg border transition-all ${
+                  doubt.status === 'resolved' 
+                    ? "bg-zinc-900/50 border-zinc-800 opacity-60" 
+                    : "bg-black/40 border-yellow-500/30 hover:border-yellow-500/50"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-1">
+                  <span className={`text-xs font-bold ${doubt.status === 'resolved' ? 'text-zinc-500' : 'text-blue-400'}`}>
+                    {doubt.studentName}
+                  </span>
+                  <span className="text-zinc-600 text-[10px]">
+                     {new Date(doubt.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
+                  </span>
+                </div>
+                
+                <p className="text-zinc-300 text-sm mb-3 leading-relaxed">"{doubt.text}"</p>
+                
+                {doubt.status === 'resolved' && doubt.answer && (
+                   <div className="mb-2 pl-2 border-l-2 border-green-500/50 text-xs text-green-400/80">
+                      You: {doubt.answer}
+                   </div>
+                )}
+
+                {doubt.status === 'pending' && (
+                  <Button 
+                    onClick={() => setSelectedDoubt(doubt)}
+                    className="w-full h-7 text-xs bg-yellow-600/20 hover:bg-yellow-600/40 text-yellow-400 border border-yellow-600/30"
+                  >
+                    <MessageSquareReply className="w-3 h-3 mr-1" /> Reply
+                  </Button>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Reply Dialog */}
+      <Dialog open={!!selectedDoubt} onOpenChange={(open) => !open && setSelectedDoubt(null)}>
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-yellow-400 flex items-center gap-2">
+               <MessageSquareReply className="w-5 h-5"/> Reply to Student
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="bg-black/40 p-3 rounded text-sm text-zinc-400 border border-zinc-800">
+               <span className="text-xs text-zinc-500 uppercase font-bold block mb-1">Question from {selectedDoubt?.studentName}:</span>
+               "{selectedDoubt?.text}"
+            </div>
+
+            <div className="space-y-2">
+               <label className="text-xs font-bold text-zinc-300 uppercase">Your Answer</label>
+               <textarea 
+                  className="w-full h-32 bg-black border border-zinc-700 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Type your explanation here..."
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+               />
+            </div>
+
+            <div className="flex justify-end gap-2">
+               <Button variant="ghost" onClick={() => setSelectedDoubt(null)} className="text-zinc-400">Cancel</Button>
+               <Button 
+                 onClick={handleReply} 
+                 className="bg-yellow-600 hover:bg-yellow-500 text-white"
+                 disabled={!replyText.trim()}
+               >
+                 <Send className="w-4 h-4 mr-2"/> Send Reply
+               </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+
+================================================
+FILE: components/landing/LobbyScreen.tsx
+================================================
+"use client";
+import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "../providers/AuthProvider";
+
+export default function LobbyScreen({ onJoin }: { onJoin: (name: string, role: string) => void }) {
+  const [name, setName] = useState("");
+  const { user, signInWithGoogle, logout } = useAuth(); // <--- Magic Hook
+useEffect(() => {
+    if (user) {
+      // Wait 1.5 seconds for the "Identity Verified" animation to play, then join
+      const timer = setTimeout(() => {
+        onJoin(user.displayName || "Student", "student");
+      }, 1500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [user, onJoin]);
+  return (
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      
+      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 p-8 z-10 shadow-2xl">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black text-white tracking-tighter mb-2">
+            NETVERSE <span className="text-blue-500">LABS</span>
+          </h1>
+          <p className="text-zinc-400">The Spatial Operating System for Engineering</p>
+        </div>
+
+        <div className="space-y-4">
+          <Button 
+            className="w-full bg-white text-black hover:bg-zinc-200 font-bold py-6 flex items-center gap-3"
+            onClick={signInWithGoogle}
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+            </svg>
+            Sign in with Google
+          </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-zinc-800"></span></div>
+            <div className="relative flex justify-center text-xs uppercase"><span className="bg-zinc-900 px-2 text-zinc-500">Or guest access</span></div>
+          </div>
+
+          <Input 
+            placeholder="Enter Guest Name" 
+            className="bg-black border-zinc-700 text-white"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Button 
+            className="w-full bg-blue-600 hover:bg-blue-700"
+            onClick={() => onJoin(name || "Guest", "student")}
+          >
+            Enter Campus
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+
+================================================
+FILE: components/modals/CalendarWindow.tsx
+================================================
+
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { GoogleWorkspace } from "@/lib/google-workspace";
+import { isTeacher } from "@/lib/game-config"; // Import RBAC check
+import { Calendar as CalendarIcon, MapPin, Plus, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+
+interface CalendarWindowProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function CalendarWindow({ isOpen, onClose }: CalendarWindowProps) {
+  const { accessToken, user } = useAuth();
+  const [events, setEvents] = useState<any[]>([]);
+  const amITeacher = isTeacher(user?.email);
+
+  // Form State
+  const [isCreating, setIsCreating] = useState(false);
+  const [newEvent, setNewEvent] = useState({ title: "", time: "" });
+
+  const loadEvents = () => {
+    if (accessToken) {
+      GoogleWorkspace.getEvents(accessToken)
+        .then((data) => setEvents(data.items || []))
+        .catch(console.error);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) loadEvents();
+  }, [isOpen, accessToken]);
+
+  const handleCreateEvent = async () => {
+    if (!accessToken || !newEvent.title || !newEvent.time) return;
+    
+    setIsCreating(true);
+    try {
+      // Create simplified start/end times (1 hour duration)
+      const startDate = new Date(newEvent.time);
+      const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +1 Hour
+
+      await GoogleWorkspace.createEvent(accessToken, {
+        summary: `[NETVERSE] ${newEvent.title}`,
+        description: "Lecture scheduled via NetVerse Campus.",
+        start: startDate.toISOString(),
+        end: endDate.toISOString()
+      });
+
+      toast.success("Lecture Scheduled!");
+      setNewEvent({ title: "", time: "" });
+      loadEvents(); // Refresh list
+    } catch (e) {
+      toast.error("Failed to schedule.");
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-md h-[600px] bg-zinc-950 border-zinc-800 text-white flex flex-col p-0">
+        
+        {/* Header */}
+        <div className="bg-[#4285f4] p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CalendarIcon className="w-6 h-6 text-white" />
+            <DialogTitle className="text-lg font-bold">Campus Schedule</DialogTitle>
+          </div>
+          {amITeacher && <span className="text-[10px] bg-white/20 px-2 py-1 rounded font-bold">TEACHER MODE</span>}
+        </div>
+
+        {/* TEACHER ONLY: Creation Form */}
+        {amITeacher && (
+          <div className="p-4 border-b border-zinc-800 bg-zinc-900/50 space-y-3">
+             <div className="text-xs font-bold text-blue-400 uppercase">Schedule Lecture</div>
+             <div className="flex gap-2">
+                <Input 
+                  placeholder="Lecture Topic (e.g. Intro to Node.js)" 
+                  className="bg-black border-zinc-700 h-8 text-xs"
+                  value={newEvent.title}
+                  onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+                />
+             </div>
+             <div className="flex gap-2">
+                <Input 
+                  type="datetime-local" 
+                  className="bg-black border-zinc-700 h-8 text-xs"
+                  value={newEvent.time}
+                  onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                />
+                <Button size="sm" onClick={handleCreateEvent} disabled={isCreating} className="h-8 bg-blue-600 hover:bg-blue-500">
+                  {isCreating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
+                  Add
+                </Button>
+             </div>
+          </div>
+        )}
+
+        {/* Event List */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {events.length === 0 && <p className="text-center text-zinc-500 mt-10">No upcoming events.</p>}
+          
+          {events.map((event) => (
+            <div key={event.id} className="bg-zinc-900 border-l-4 border-blue-500 p-3 rounded shadow-sm">
+              <div className="text-xs text-blue-400 font-bold mb-1">
+                {event.start.dateTime 
+                  ? new Date(event.start.dateTime).toLocaleString([], {weekday: 'short', hour: '2-digit', minute:'2-digit'})
+                  : "All Day"}
+              </div>
+              <h4 className="font-bold text-sm">{event.summary}</h4>
+              {event.location && (
+                <div className="flex items-center gap-1 text-[10px] text-zinc-400 mt-1">
+                  <MapPin className="w-3 h-3" /> {event.location}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+
+================================================
+FILE: components/modals/ClassroomWindow.tsx
+================================================
+
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { GoogleWorkspace } from "@/lib/google-workspace";
+import { isTeacher } from "@/lib/game-config";
+import { Book, Clock, Plus, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+
+interface ClassroomWindowProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function ClassroomWindow({ isOpen, onClose }: ClassroomWindowProps) {
+  const { accessToken, user } = useAuth();
+  const amITeacher = isTeacher(user?.email);
+
+  const [courses, setCourses] = useState<any[]>([]);
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  
+  // Creation State
+  const [newWork, setNewWork] = useState({ title: "", desc: "" });
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && accessToken) {
+      GoogleWorkspace.getCourses(accessToken)
+        .then((data) => setCourses(data.courses || []))
+        .catch(console.error);
+    }
+  }, [isOpen, accessToken]);
+
+  const handleCourseClick = async (courseId: string) => {
+    if (!accessToken) return;
+    setSelectedCourse(courseId);
+    const data = await GoogleWorkspace.getCourseWork(accessToken, courseId);
+    setAssignments(data.courseWork || []);
+  };
+
+  const handleCreateAssignment = async () => {
+    if (!accessToken || !selectedCourse || !newWork.title) return;
+    setIsPublishing(true);
+    try {
+        await GoogleWorkspace.createAssignment(accessToken, selectedCourse, {
+            title: newWork.title,
+            description: newWork.desc
+        });
+        toast.success("Assignment Posted!");
+        setNewWork({ title: "", desc: "" });
+        handleCourseClick(selectedCourse); // Refresh
+    } catch(e) {
+        toast.error("Failed to post.");
+    } finally {
+        setIsPublishing(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-4xl h-[80vh] bg-zinc-950 border-zinc-800 text-white flex flex-col p-0 overflow-hidden">
+        {/* Header */}
+        <div className="bg-[#0f9d58] p-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Book className="w-8 h-8 text-white" />
+            <div>
+                <DialogTitle className="text-xl font-bold">Classroom</DialogTitle>
+                <p className="text-green-100 text-xs">NetVerse Integration</p>
+            </div>
+          </div>
+          {amITeacher && <div className="bg-white/20 px-3 py-1 rounded font-bold text-xs">FACULTY ACCESS</div>}
+        </div>
+
+        <div className="flex flex-1 overflow-hidden">
+          {/* Sidebar */}
+          <div className="w-1/3 border-r border-zinc-800 bg-zinc-900 p-4 overflow-y-auto">
+            <h3 className="text-xs font-bold text-zinc-500 uppercase mb-3">Your Courses</h3>
+            <div className="space-y-2">
+              {courses.map((course) => (
+                <div 
+                  key={course.id} 
+                  onClick={() => handleCourseClick(course.id)}
+                  className={`p-3 rounded-lg cursor-pointer transition-all border ${
+                    selectedCourse === course.id ? "bg-green-900/20 border-green-500 text-white" : "bg-zinc-800 border-transparent hover:bg-zinc-700"
+                  }`}
+                >
+                  <div className="font-bold text-sm truncate">{course.name}</div>
+                  <div className="text-[10px] text-zinc-400">{course.section}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Area */}
+          <div className="flex-1 flex flex-col bg-black">
+             {/* TEACHER CREATE BAR */}
+             {amITeacher && selectedCourse && (
+                <div className="p-4 border-b border-zinc-800 bg-zinc-900/30 grid gap-2">
+                    <span className="text-xs font-bold text-green-400">POST NEW ASSIGNMENT</span>
+                    <Input 
+                        placeholder="Assignment Title" 
+                        value={newWork.title}
+                        onChange={(e) => setNewWork({...newWork, title: e.target.value})}
+                        className="bg-black h-8 text-xs border-zinc-700"
+                    />
+                    <div className="flex gap-2">
+                        <Input 
+                            placeholder="Description (Optional)" 
+                            value={newWork.desc}
+                            onChange={(e) => setNewWork({...newWork, desc: e.target.value})}
+                            className="bg-black h-8 text-xs border-zinc-700"
+                        />
+                        <Button size="sm" onClick={handleCreateAssignment} disabled={isPublishing} className="h-8 bg-green-600 hover:bg-green-500">
+                             {isPublishing ? <Loader2 className="w-3 h-3 animate-spin"/> : <Plus className="w-3 h-3" />}
+                             Post
+                        </Button>
+                    </div>
+                </div>
+             )}
+
+             {/* ASSIGNMENT LIST */}
+             <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                {!selectedCourse && <div className="text-zinc-500 text-center mt-10">Select a course to view assignments</div>}
+                {assignments.map((work) => (
+                  <div key={work.id} className="bg-zinc-900 border border-zinc-800 p-4 rounded-xl flex justify-between items-center">
+                    <div>
+                      <h4 className="font-bold hover:underline cursor-pointer" onClick={() => window.open(work.alternateLink, '_blank')}>
+                        {work.title}
+                      </h4>
+                      <p className="text-xs text-zinc-400 mt-1 max-w-md truncate">{work.description}</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                       <span className="text-xs bg-zinc-800 px-2 py-1 rounded flex items-center gap-1">
+                         <Clock className="w-3 h-3" /> Due: {work.dueDate ? `${work.dueDate.day}/${work.dueDate.month}` : 'No Date'}
+                       </span>
+                       <Button size="sm" variant="outline" onClick={() => window.open(work.alternateLink, '_blank')}>
+                         View
+                       </Button>
+                    </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+  
+}
+
+
+================================================
+FILE: components/modals/CodeEditorWindow.tsx
+================================================
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Editor from "@monaco-editor/react";
+import { 
+  Play, RotateCcw, Save, Loader2, Terminal, X, 
+  ChevronDown, Code2, FileText, RefreshCw, Bot 
+} from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { CloudFile, CloudAPI } from "@/lib/cloud-shell-api";
+
+// --- LANGUAGE CONFIG ---
+// IDs match Monaco Editor language identifiers
+const LANGUAGES = [
+  { id: "cpp", label: "C++ (GCC)", snippet: "#include <iostream>\n\nint main() {\n\tstd::cout << \"Hello NetVerse\";\n\treturn 0;\n}" },
+  { id: "python", label: "Python 3", snippet: "print('Hello NetVerse')" },
+  { id: "javascript", label: "Node.js", snippet: "console.log('Hello NetVerse');" },
+  { id: "go", label: "Go 1.20", snippet: "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Println(\"Hello\")\n}" },
+];
+
+interface CodeEditorWindowProps {
+  isOpen: boolean;
+  onClose: () => void;
+  station: any;
+}
+
+export default function CodeEditorWindow({ isOpen, onClose, station }: CodeEditorWindowProps) {
+  const { user } = useAuth();
+  
+  // --- STATE ---
+  const [activeLang, setActiveLang] = useState(LANGUAGES[0]);
+  const [code, setCode] = useState(LANGUAGES[0].snippet);
+  const [output, setOutput] = useState("");
+  
+  // Loading States
+  const [isRunning, setIsRunning] = useState(false);
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isLoadingFiles, setIsLoadingFiles] = useState(false);
+
+  // File System State
+  const [currentFilename, setCurrentFilename] = useState("main.cpp");
+  const [files, setFiles] = useState<CloudFile[]>([]);
+
+  // --- 1. INITIAL LOAD ---
+  useEffect(() => {
+    if (isOpen && user?.email) {
+      refreshFiles();
+    }
+  }, [isOpen, user]);
+
+  const refreshFiles = async () => {
+    if (!user?.email) return;
+    setIsLoadingFiles(true);
+    const data = await CloudAPI.listFiles(user.email);
+    if (data.files) setFiles(data.files);
+    setIsLoadingFiles(false);
+  };
+
+  // --- 2. ACTIONS ---
+
+  const handleRun = async () => {
+    setIsRunning(true);
+    setOutput("📡 Sending to Cloud VM...");
+    
+    // Call Cloud API
+    const result = await CloudAPI.execute(code, activeLang.id);
+    
+    if (result.isError) {
+      setOutput(`⚠️ Error:\n${result.output}`);
+    } else {
+      setOutput(`✅ Execution Time: ${result.executionTime || "0ms"}\n\n${result.output}`);
+    }
+    setIsRunning(false);
+  };
+
+  const handleSave = async () => {
+    if (!user?.email) return toast.error("You must be logged in to save.");
+    
+    let filename = currentFilename;
+    if (filename === "untitled" || filename === "main.cpp") {
+      const input = prompt("Enter filename to save (e.g., mysolution.cpp):");
+      if (!input) return;
+      filename = input;
+    }
+
+    const toastId = toast.loading("Saving to cloud...");
+    const res = await CloudAPI.saveFile(user.email, filename, code);
+    
+    toast.dismiss(toastId);
+    if (res.success) {
+      toast.success("File saved successfully!");
+      setCurrentFilename(filename);
+      refreshFiles();
+    } else {
+      toast.error("Save failed: " + res.error);
+    }
+  };
+
+  const loadFile = async (filename: string) => {
+    if (!user?.email) return;
+    const toastId = toast.loading(`Loading ${filename}...`);
+    
+    const data = await CloudAPI.readFile(user.email, filename);
+    
+    toast.dismiss(toastId);
+    if (data.content) {
+      setCode(data.content);
+      setCurrentFilename(filename);
+      setOutput(""); 
+      
+      // Auto-detect language based on extension
+      if (filename.endsWith(".py")) setActiveLang(LANGUAGES[1]);
+      else if (filename.endsWith(".js")) setActiveLang(LANGUAGES[2]);
+      else if (filename.endsWith(".go")) setActiveLang(LANGUAGES[3]);
+      else setActiveLang(LANGUAGES[0]);
+    }
+  };
+
+  // --- 3. AI ASSISTANT LOGIC ---
+  const handleAskAI = async () => {
+    if (!output) {
+      toast.error("Run your code first to generate an output/error for the AI to analyze!");
+      return;
+    }
+    
+    setIsAiLoading(true);
+    try {
+      // Assuming you have a Next.js API route at /api/hint
+      const res = await fetch("/api/hint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          code, 
+          error: output, 
+          language: activeLang.id 
+        }),
+      });
+      
+      if (!res.ok) throw new Error("AI Service unavailable");
+      
+      const data = await res.json();
+      setOutput((prev) => prev + "\n\n🤖 AI LAB ASSISTANT:\n" + data.hint);
+    } catch (err) {
+      toast.error("AI Assistant is offline.");
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
+      {/* FORCE FULL WIDTH/HEIGHT */}
+      <DialogContent className="!max-w-[95vw] !w-[95vw] h-[90vh] bg-[#1e1e1e] border-zinc-800 p-0 gap-0 flex flex-col overflow-hidden sm:rounded-xl shadow-2xl">
+        
+        {/* --- HEADER --- */}
+        <div className="h-16 bg-[#252526] border-b border-black/40 flex items-center justify-between px-4 shrink-0 select-none">
+          {/* Left: Title & File Name */}
+          <div className="flex items-center gap-4">
+             <div className="flex flex-col">
+               {/* DialogTitle for Shadcn Accessibility */}
+               <DialogTitle className="text-white font-bold text-sm flex items-center gap-2">
+                 <Code2 className="w-4 h-4 text-blue-400"/>
+                 {station?.label || "IDE Environment"}
+               </DialogTitle>
+               
+               <span className="text-[10px] text-zinc-400 font-mono flex items-center gap-1 mt-0.5">
+                 {currentFilename} {files.find(f => f.name === currentFilename) ? "(Saved)" : "(Unsaved)"}
+               </span>
+             </div>
+
+             {/* Language Select */}
+             <div className="relative ml-4 group">
+               <select 
+                  value={activeLang.id}
+                  onChange={(e) => {
+                    const selected = LANGUAGES.find(l => l.id === e.target.value) || LANGUAGES[0];
+                    setActiveLang(selected);
+                    setCode(selected.snippet); // Update Code
+                    setOutput("");             // Clear Output
+                  }}
+                  className="appearance-none bg-zinc-900 border border-zinc-700 text-zinc-300 text-xs rounded-md pl-3 pr-8 py-1.5 focus:outline-none focus:border-blue-500 cursor-pointer hover:border-zinc-500 transition-colors"
+               >
+                 {LANGUAGES.map(lang => (
+                   <option key={lang.id} value={lang.id}>{lang.label}</option>
+                 ))}
+               </select>
+               <ChevronDown className="absolute right-2 top-2 w-3 h-3 text-zinc-500 pointer-events-none"/>
+             </div>
+          </div>
+
+          {/* Right: Buttons */}
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="ghost" onClick={() => setCode(activeLang.snippet)} className="text-zinc-400 hover:text-white hidden sm:flex">
+              <RotateCcw className="w-4 h-4 mr-2"/> Reset
+            </Button>
+            
+            {/* AI BUTTON */}
+            <Button 
+              size="sm" 
+              variant="secondary"
+              onClick={handleAskAI} 
+              disabled={isAiLoading || !output}
+              className="bg-purple-900/20 text-purple-300 hover:bg-purple-900/40 border border-purple-500/30"
+            >
+              {isAiLoading ? <Loader2 className="w-4 h-4 animate-spin"/> : <Bot className="w-4 h-4 sm:mr-2"/>}
+              <span className="hidden sm:inline">AI Hint</span>
+            </Button>
+
+            {/* SAVE BUTTON */}
+            <Button size="sm" variant="secondary" onClick={handleSave} className="bg-blue-900/20 text-blue-300 hover:bg-blue-900/40 border border-blue-500/30">
+              <Save className="w-4 h-4 mr-2"/> Save
+            </Button>
+
+            {/* RUN BUTTON */}
+            <Button size="sm" onClick={handleRun} disabled={isRunning} className="bg-green-600 hover:bg-green-500 text-white min-w-[100px] shadow-lg shadow-green-900/20">
+              {isRunning ? <Loader2 className="w-4 h-4 animate-spin"/> : <Play className="w-4 h-4 mr-2 fill-current"/>}
+              Run
+            </Button>
+            
+            <div className="w-px h-6 bg-zinc-700 mx-2"/>
+            <Button size="icon" variant="ghost" onClick={onClose} className="text-zinc-400 hover:text-white rounded-full w-8 h-8 hover:bg-red-500/20 hover:text-red-400">
+              <X className="w-5 h-5"/>
+            </Button>
+          </div>
+        </div>
+
+        {/* --- MAIN BODY --- */}
+        <div className="flex-1 flex overflow-hidden">
+          
+          {/* LEFT: FILE EXPLORER SIDEBAR */}
+          <div className="w-56 bg-[#181818] border-r border-black/40 flex flex-col shrink-0">
+            <div className="h-8 flex items-center justify-between px-3 text-[11px] font-bold text-zinc-500 uppercase tracking-wider bg-[#1f1f1f]">
+              <span>Cloud Files</span>
+              <RefreshCw className={`w-3 h-3 cursor-pointer hover:text-white ${isLoadingFiles ? 'animate-spin' : ''}`} onClick={refreshFiles}/>
+            </div>
+            
+            <div className="flex-1 overflow-auto p-2 space-y-1">
+               {isLoadingFiles ? (
+                 <div className="text-zinc-600 text-xs p-2 text-center">Syncing...</div>
+               ) : files.length === 0 ? (
+                 <div className="text-zinc-600 text-xs p-2 text-center italic">No files found</div>
+               ) : (
+                 files.map((file) => (
+                   <div 
+                     key={file.name} 
+                     onClick={() => loadFile(file.name)}
+                     className={`flex items-center gap-2 px-2 py-1.5 rounded text-xs cursor-pointer select-none transition-colors ${
+                       currentFilename === file.name ? "bg-blue-600/20 text-blue-400" : "text-zinc-400 hover:bg-[#2a2a2a] hover:text-zinc-200"
+                     }`}
+                   >
+                     <FileText className="w-3.5 h-3.5 opacity-70"/>
+                     <span className="truncate">{file.name}</span>
+                   </div>
+                 ))
+               )}
+            </div>
+          </div>
+
+          {/* RIGHT: EDITOR + TERMINAL */}
+          <div className="flex-1 flex flex-col min-w-0">
+            
+            {/* TOP: MONACO EDITOR */}
+            <div className="flex-1 relative bg-[#1e1e1e]">
+               <Editor
+                 height="100%"
+                 language={activeLang.id}
+                 theme="vs-dark"
+                 value={code}
+                 onChange={(value) => setCode(value || "")}
+                 options={{
+                   minimap: { enabled: false },
+                   fontSize: 14,
+                   lineNumbers: "on",
+                   scrollBeyondLastLine: false,
+                   automaticLayout: true,
+                   padding: { top: 16 }
+                 }}
+               />
+            </div>
+
+            {/* BOTTOM: TERMINAL */}
+            <div className="h-48 bg-[#0d0d0d] border-t border-zinc-800 flex flex-col shrink-0">
+              <div className="h-8 bg-[#1e1e1e] border-b border-black flex items-center px-4 justify-between select-none">
+                <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+                  <Terminal className="w-3 h-3"/> Console Output
+                </span>
+                <button onClick={() => setOutput("")} className="text-[10px] text-zinc-500 hover:text-zinc-300 underline">Clear</button>
+              </div>
+              
+              <div className="flex-1 p-4 overflow-auto font-mono text-sm">
+                {output ? (
+                  <pre className="text-zinc-300 whitespace-pre-wrap font-[inherit]">{output}</pre>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-zinc-800 space-y-2 select-none">
+                    <Play className="w-8 h-8 opacity-20"/>
+                    <span className="text-xs">Run code to see output</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+
+================================================
+FILE: components/modals/GradeSheetWindow.tsx
+================================================
+[Empty file]
+
+
+================================================
+FILE: components/modals/ProctorDashboard.tsx
+================================================
+"use client";
+
+import React from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Grid, Maximize2, AlertTriangle, CheckCircle } from "lucide-react";
+
+interface ProctorDashboardProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+// MOCK DATA: Using your actual uploaded assets as placeholders
+const STUDENTS = [
+  { id: "S-101", name: "Alice M.", status: "coding", img: "/screenshots/NodeLabs-1.png", warning: false },
+  { id: "S-102", name: "Bob D.", status: "idle", img: "/screenshots/NodeLabs-2.png", warning: true },
+  { id: "S-103", name: "Charlie", status: "coding", img: "/screenshots/sandbox-1.png", warning: false },
+  { id: "S-104", name: "Dave K.", status: "coding", img: "/screenshots/sandbox-2.png", warning: false },
+  { id: "S-105", name: "Eve P.", status: "coding", img: "/screenshots/sandbox-3.png", warning: false },
+  { id: "S-106", name: "Frank", status: "offline", img: "/screenshots/sandbox-4.png", warning: true },
+];
+
+export default function ProctorDashboard({ isOpen, onClose }: ProctorDashboardProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-[90vw] h-[85vh] bg-slate-950 border-slate-800 text-white flex flex-col">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div className="flex items-center gap-2">
+            <Grid className="text-purple-400" />
+            <DialogTitle className="text-sm font-mono text-zinc-300 font-normal">
+                <div className="text-xl font-bold">Proctor Surveillance Grid</div>
+            </DialogTitle>
+            <span className="bg-red-900/50 text-red-400 text-xs px-2 py-0.5 rounded border border-red-800 animate-pulse">
+              LIVE FEED • REC
+            </span>
+          </div>
+          <div className="text-sm text-slate-400">
+            Active Students: <span className="text-white font-bold">6/20</span>
+          </div>
+        </div>
+
+        {/* Grid */}
+        <div className="flex-1 overflow-y-auto grid grid-cols-3 gap-4 p-4">
+          {STUDENTS.map((student) => (
+            <div key={student.id} className="relative group bg-slate-900 rounded-lg border border-slate-800 overflow-hidden hover:border-purple-500 transition-all">
+              
+              {/* Fake Screen Feed */}
+              <div className="aspect-video bg-black relative">
+                 {/* Using the images you uploaded */}
+                 <img src={student.img} alt="screen" className="w-full h-full object-cover opacity-80 group-hover:opacity-100" />
+                 
+                 {/* Warning Overlay */}
+                 {student.warning && (
+                   <div className="absolute inset-0 bg-red-500/10 flex items-center justify-center">
+                     <AlertTriangle className="w-12 h-12 text-red-500 drop-shadow-lg animate-bounce" />
+                   </div>
+                 )}
+              </div>
+
+              {/* Info Bar */}
+              <div className="p-3 flex items-center justify-between bg-slate-900">
+                <div>
+                   <div className="font-bold text-sm">{student.name}</div>
+                   <div className="text-[10px] text-slate-500 uppercase">{student.id} • {student.status}</div>
+                </div>
+                {student.warning ? (
+                  <button className="text-[10px] bg-red-600 hover:bg-red-500 px-2 py-1 rounded text-white font-bold">
+                    SEND WARNING
+                  </button>
+                ) : (
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                )}
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+
+================================================
+FILE: components/modals/TerminalWindow.tsx
+================================================
+"use client";
+
+import { Terminal, Maximize2, X, Play, RefreshCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+// 1. Import DialogTitle
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+
+interface TerminalWindowProps {
+  isOpen: boolean;
+  onClose: () => void;
+  stationName: string;
+  stationId: string;
+}
+
+export default function TerminalWindow({ isOpen, onClose, stationName, stationId }: TerminalWindowProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={(val) => !val && onClose()}>
+      <DialogContent className="max-w-[90vw] h-[85vh] bg-zinc-950 border-zinc-800 p-0 gap-0 flex flex-col overflow-hidden">
+        
+        {/* Window Title Bar */}
+        <div className="h-10 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4 select-none">
+          <div className="flex items-center gap-3">
+            <Terminal className="w-4 h-4 text-blue-500" />
+            
+            {/* 2. Add DialogTitle here. This fixes the accessibility error. */}
+            <DialogTitle className="text-sm font-mono text-zinc-300 font-normal">
+              root@netverse:{stationId}
+            </DialogTitle>
+            
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-500 hover:text-zinc-300">
+              <RefreshCcw className="w-3 h-3" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-500 hover:text-zinc-300">
+              <Maximize2 className="w-3 h-3" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose} className="h-6 w-6 text-red-400 hover:bg-red-900/20">
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Toolbar */}
+        <div className="h-12 bg-zinc-900/50 border-b border-zinc-800 flex items-center px-4 gap-4">
+          <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+             <span className="text-xs text-green-500 font-bold">CONNECTED</span>
+          </div>
+          <div className="h-4 w-px bg-zinc-800" />
+          <Button size="sm" className="bg-blue-600 hover:bg-blue-500 text-xs h-7 gap-2">
+            <Play className="w-3 h-3" /> Run Script
+          </Button>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 bg-black relative font-mono text-sm p-4 text-zinc-300 overflow-auto">
+          <div className="opacity-50">
+            <p>NetVerse OS v2.4.0 [Stable]</p>
+            <p className="mb-4">Type "help" for a list of commands.</p>
+            <p><span className="text-green-500">root@{stationId}:~#</span> apt update</p>
+            <p>Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease</p>
+            <p>Hit:2 http://security.ubuntu.com/ubuntu jammy-security InRelease</p>
+            <p>Reading package lists... Done</p>
+            <p className="mt-2"><span className="text-green-500">root@{stationId}:~#</span> <span className="animate-pulse">_</span></p>
+          </div>
+        </div>
+
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+
+================================================
+FILE: components/providers/AuthProvider.tsx
+================================================
+"use client";
+
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { 
+  User, 
+  onAuthStateChanged, 
+  signInWithPopup, 
+  signOut,
+  GoogleAuthProvider 
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
+
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
+  accessToken: string | null; // (+) Store the Google Access Token
+  signInWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  accessToken: null,
+  signInWithGoogle: async () => {},
+  logout: async () => {},
+});
+
+export const useAuth = () => useContext(AuthContext);
+
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  const signInWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      // (+) ADD SCOPES HERE
+      // provider.addScope("https://www.googleapis.com/auth/classroom.courses.readonly");
+      // provider.addScope("https://www.googleapis.com/auth/classroom.coursework.me");
+      // provider.addScope("https://www.googleapis.com/auth/calendar.events.readonly");
+      // provider.addScope("https://www.googleapis.com/auth/spreadsheets.readonly"); // Teacher might need write later
+
+      // Allows creating/editing calendar events
+      provider.addScope("https://www.googleapis.com/auth/calendar"); 
+      // Allows teachers to manage coursework
+      provider.addScope("https://www.googleapis.com/auth/classroom.coursework.students");
+      // Allows reading course lists
+      provider.addScope("https://www.googleapis.com/auth/classroom.courses.readonly");
+      const result = await signInWithPopup(auth, provider);
+      
+      // (+) Extract Access Token from credential
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      if (credential?.accessToken) {
+        setAccessToken(credential.accessToken);
+        // Persist briefly for session (in real app, use secure storage or refresh tokens)
+        sessionStorage.setItem("google_access_token", credential.accessToken);
+      }
+    } catch (error) {
+      console.error("Login Failed:", error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setAccessToken(null);
+      sessionStorage.removeItem("google_access_token");
+    } catch (error) {
+      console.error("Logout Failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      // Try to recover token from session if page refreshed
+      const cachedToken = sessionStorage.getItem("google_access_token");
+      if (cachedToken) setAccessToken(cachedToken);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, loading, accessToken, signInWithGoogle, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+
+================================================
+FILE: components/ui/badge.tsx
+================================================
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const badgeVariants = cva(
+  "inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+        destructive:
+          "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:
+          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+function Badge({
+  className,
+  variant,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"span"> &
+  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+  const Comp = asChild ? Slot : "span"
+
+  return (
+    <Comp
+      data-slot="badge"
+      className={cn(badgeVariants({ variant }), className)}
+      {...props}
+    />
+  )
+}
+
+export { Badge, badgeVariants }
+
+
+
+================================================
+FILE: components/ui/button.tsx
+================================================
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9",
+        "icon-sm": "size-8",
+        "icon-lg": "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  asChild = false,
+  ...props
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }) {
+  const Comp = asChild ? Slot : "button"
+
+  return (
+    <Comp
+      data-slot="button"
+      data-variant={variant}
+      data-size={size}
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, buttonVariants }
+
+
+
+================================================
+FILE: components/ui/card.tsx
+================================================
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Card({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-header"
+      className={cn(
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn("px-6", className)}
+      {...props}
+    />
+  )
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+}
+
+
+
+================================================
+FILE: components/ui/dialog.tsx
+================================================
+"use client"
+
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { XIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+function Dialog({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+}
+
+function DialogTrigger({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+}
+
+function DialogPortal({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+}
+
+function DialogClose({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
+}
+
+function DialogOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  return (
+    <DialogPrimitive.Overlay
+      data-slot="dialog-overlay"
+      className={cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  showCloseButton?: boolean
+}) {
+  return (
+    <DialogPortal data-slot="dialog-portal">
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        data-slot="dialog-content"
+        className={cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 outline-none sm:max-w-lg",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            data-slot="dialog-close"
+            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+          >
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+}
+
+function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-header"
+      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-footer"
+      className={cn(
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+  return (
+    <DialogPrimitive.Title
+      data-slot="dialog-title"
+      className={cn("text-lg leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+}
+
+
+
+================================================
+FILE: components/ui/input.tsx
+================================================
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Input }
+
+
+
+================================================
+FILE: components/ui/sonner.tsx
+================================================
+"use client"
+
+import {
+  CircleCheckIcon,
+  InfoIcon,
+  Loader2Icon,
+  OctagonXIcon,
+  TriangleAlertIcon,
+} from "lucide-react"
+import { useTheme } from "next-themes"
+import { Toaster as Sonner, type ToasterProps } from "sonner"
+
+const Toaster = ({ ...props }: ToasterProps) => {
+  const { theme = "system" } = useTheme()
+
+  return (
+    <Sonner
+      theme={theme as ToasterProps["theme"]}
+      className="toaster group"
+      icons={{
+        success: <CircleCheckIcon className="size-4" />,
+        info: <InfoIcon className="size-4" />,
+        warning: <TriangleAlertIcon className="size-4" />,
+        error: <OctagonXIcon className="size-4" />,
+        loading: <Loader2Icon className="size-4 animate-spin" />,
+      }}
+      style={
+        {
+          "--normal-bg": "var(--popover)",
+          "--normal-text": "var(--popover-foreground)",
+          "--normal-border": "var(--border)",
+          "--border-radius": "var(--radius)",
+        } as React.CSSProperties
+      }
+      {...props}
+    />
+  )
+}
+
+export { Toaster }
+
+
+
+================================================
+FILE: components/ui/tabs.tsx
+================================================
+"use client"
+
+import * as React from "react"
+import * as TabsPrimitive from "@radix-ui/react-tabs"
+
+import { cn } from "@/lib/utils"
+
+function Tabs({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Root>) {
+  return (
+    <TabsPrimitive.Root
+      data-slot="tabs"
+      className={cn("flex flex-col gap-2", className)}
+      {...props}
+    />
+  )
+}
+
+function TabsList({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.List>) {
+  return (
+    <TabsPrimitive.List
+      data-slot="tabs-list"
+      className={cn(
+        "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TabsTrigger({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+  return (
+    <TabsPrimitive.Trigger
+      data-slot="tabs-trigger"
+      className={cn(
+        "data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TabsContent({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Content>) {
+  return (
+    <TabsPrimitive.Content
+      data-slot="tabs-content"
+      className={cn("flex-1 outline-none", className)}
+      {...props}
+    />
+  )
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsContent }
+
+
+
+================================================
+FILE: hooks/useChat.ts
+================================================
+import { useEffect, useState, useRef } from "react";
+import { ref, onValue, push, set, serverTimestamp, query, limitToLast } from "firebase/database";
+import { db } from "@/lib/firebase";
+
+export interface Message {
+  id: string;
+  senderName: string;
+  text: string;
+  timestamp: number;
+}
+
+export function useChat(chatId: string | null) {
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  // 1. Subscribe to Messages
+  useEffect(() => {
+    if (!chatId) {
+        setMessages([]);
+        return;
+    }
+
+    const messagesRef = ref(db, `chats/${chatId}`);
+    // Only load last 50 messages to save bandwidth
+    const q = query(messagesRef, limitToLast(50));
+
+    const unsubscribe = onValue(q, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+
+      const loadedMessages = Object.entries(data).map(([key, val]: any) => ({
+        id: key,
+        ...val,
+      }));
+      setMessages(loadedMessages);
+    });
+
+    return () => unsubscribe();
+  }, [chatId]);
+
+  // 2. Send Function
+  const sendMessage = async (senderName: string, text: string) => {
+    if (!chatId || !text.trim()) return;
+
+    const messagesRef = ref(db, `chats/${chatId}`);
+    const newMessageRef = push(messagesRef);
+    
+    await set(newMessageRef, {
+      senderName,
+      text,
+      timestamp: serverTimestamp(),
+    });
+  };
+
+  return { messages, sendMessage };
+}
+
+
+================================================
+FILE: hooks/useMultiplayer.ts
+================================================
+import { useEffect, useState, useRef } from "react";
+import { ref, onValue, set, onDisconnect, remove } from "firebase/database";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/components/providers/AuthProvider";
+
+// Define the shape of a player in the DB
+export interface RemotePlayer {
+  id: string;
+  x: number;
+  y: number;
+  facing: 'left' | 'right' | 'up' | 'down';
+  isMoving: boolean;
+  username: string;
+}
+
+export function useMultiplayer(
+  roomId: string,
+  myPos: { x: number; y: number },
+  myFacing: string,
+  isMoving: boolean
+):{ otherPlayers: RemotePlayer[] } {
+  const { user } = useAuth();
+  const [otherPlayers, setOtherPlayers] = useState<RemotePlayer[]>([]);
+  
+  // Throttle writes to avoid hitting DB limits (limit to 100ms)
+  const lastUpdateRef = useRef(0);
+
+  // 1. JOIN ROOM & HANDLE DISCONNECT
+  useEffect(() => {
+    if (!user) return;
+
+    const myRef = ref(db, `active_sessions/${roomId}/${user.uid}`);
+
+    // Set initial data
+    set(myRef, {
+      x: myPos.x,
+      y: myPos.y,
+      facing: myFacing,
+      isMoving,
+      username: user.displayName || "Anonymous",
+      lastSeen: Date.now()
+    });
+
+    // Magic Line: If tab closes, remove me from DB
+    onDisconnect(myRef).remove();
+
+    // Cleanup when component unmounts
+    return () => {
+      remove(myRef);
+    };
+  }, [user, roomId]); // Run once on join
+
+  // 2. SYNC MOVEMENT (SEND)
+  useEffect(() => {
+    if (!user) return;
+
+    const now = Date.now();
+    // Only write if 100ms passed OR status changed significantly
+    if (now - lastUpdateRef.current > 100) {
+      const myRef = ref(db, `active_sessions/${roomId}/${user.uid}`);
+      set(myRef, {
+        x: myPos.x,
+        y: myPos.y,
+        facing: myFacing,
+        isMoving,
+        username: user.displayName,
+        lastSeen: now
+      }).catch((err) => console.error("Sync failed", err));
+      
+      lastUpdateRef.current = now;
+    }
+  }, [myPos, myFacing, isMoving, user, roomId]);
+
+  // 3. LISTEN TO OTHERS (RECEIVE)
+  useEffect(() => {
+    if (!user) return;
+
+    const roomRef = ref(db, `active_sessions/${roomId}`);
+    
+    const unsubscribe = onValue(roomRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        setOtherPlayers([]);
+        return;
+      }
+
+      // Convert Object { "uid1": {...}, "uid2": {...} } to Array [ {...}, {...} ]
+      const playersArray = Object.keys(data)
+        .filter((key) => key !== user.uid) // Remove MYSELF from the list
+        .map((key) => ({
+          id: key,
+          ...data[key]
+        }));
+
+      setOtherPlayers(playersArray);
+    });
+
+    return () => unsubscribe();
+  }, [user, roomId]);
+
+  return { otherPlayers };
+}
+
+
+================================================
+FILE: lib/cloud-shell-api.ts
+================================================
+// lib/cloud-shell-api.ts
+
+// 🔴 TODO: Replace with your actual ngrok URL from your VM terminal
+const API_BASE_URL = "https://unthrown-clemently-isabella.ngrok-free.dev";
+
+const headers = {
+  "Content-Type": "application/json",
+  "ngrok-skip-browser-warning": "true",
+};
+
+export interface CloudFile {
+  name: string;
+  size: number;
+  updatedAt: string;
+}
+
+export const CloudAPI = {
+  // 1. Run Code
+  execute: async (code: string, language: string) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/execute`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ code, language }),
+      });
+      return await res.json();
+    } catch (err) {
+      return { output: "⚠️ Network Error: Could not connect to Cloud Shell.", isError: true };
+    }
+  },
+
+  // 2. Save File
+  saveFile: async (email: string, filename: string, code: string) => {
+    const res = await fetch(`${API_BASE_URL}/save`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ email, filename, code }),
+    });
+    return await res.json();
+  },
+
+  // 3. List Files
+  listFiles: async (email: string) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/files?email=${encodeURIComponent(email)}`, {
+        method: "GET",
+        headers,
+      });
+      return await res.json();
+    } catch (err) {
+      return { files: [] };
+    }
+  },
+
+  // 4. Read File
+  readFile: async (email: string, filename: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/read?email=${encodeURIComponent(email)}&filename=${encodeURIComponent(filename)}`,
+      { method: "GET", headers }
+    );
+    return await res.json();
+  }
+};
+
+
+================================================
+FILE: lib/firebase.ts
+================================================
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth"; // Added GoogleAuthProvider import
+import { getDatabase } from "firebase/database";
+import { getAnalytics, isSupported } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  databaseURL:process.env.NEXT_PUBLIC_DATABASE_URL
+};
+
+// Initialize Firebase (Singleton pattern)
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+// Initialize Services
+const auth = getAuth(app);
+const db = getDatabase(app);
+const googleProvider = new GoogleAuthProvider(); 
+
+// Initialize Analytics (Client-side only)
+let analytics;
+if (typeof window !== "undefined") {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
+
+// Export everything, including googleProvider
+export { app, auth, db, googleProvider, analytics };
+
+
+================================================
+FILE: lib/game-config.ts
+================================================
+import { LucideIcon, Monitor, Coffee, GraduationCap } from "lucide-react";
+import { BookOpen, CalendarDays, Sheet } from "lucide-react";
+
+export const GAME_CONFIG = {
+  mapWidth: 2400,
+  mapHeight: 1600,
+  viewportWidth: 900,
+  viewportHeight: 600,
+  playerSize: 40,
+  playerSpeed: 12,
+};
+
+export type StationType = "exam" | "server" | "common" | "security" | "dev" | "npc-teacher" | "code-editor" | "classroom" | "calendar" | "sheets";
+
+export interface GameStation {
+  id: string;
+  label: string;
+  type: StationType;
+  x: number;
+  y: number;
+  color?: string;
+  icon: LucideIcon;
+  description?: string;
+  interactionRadius?: number;
+  status?: "online" | "available" | "offline";
+}
+
+export const STATIONS: GameStation[] = [
+  {
+    id: "exam-desk-01",
+    label: "Exam Station 1",
+    type: "exam",
+    x: 1850,
+    y: 550,
+    color: "bg-blue-500",
+    icon: Monitor
+  },
+  {
+    id: "cafeteria-table",
+    label: "Chill Zone",
+    type: "common",
+    x: 550,
+    y: 535,
+    color: "bg-green-500",
+    icon: Coffee
+  },
+  {
+    id: "npc-professor",
+    label: "Prof. Byte",
+    type: "npc-teacher",
+    x: 2100, 
+    y: 1350, 
+    color: "bg-yellow-500",
+    icon: GraduationCap,
+    description: "Ask for guidance.",
+    status: "available" 
+  },
+  {
+    id: "classroom-board",
+    label: "Notice Board",
+    type: "classroom",
+    x: 1400, // Adjust coordinates to fit your map
+    y: 500,
+    color: "bg-green-600",
+    icon: BookOpen,
+    description: "Access Google Classroom Assignments"
+  },
+  {
+    id: "campus-calendar",
+    label: "Schedule",
+    type: "calendar",
+    x: 1600,
+    y: 500,
+    color: "bg-blue-600",
+    icon: CalendarDays,
+    description: "View Upcoming Lectures & Exams"
+  },
+  {
+    id: "teacher-gradebook",
+    label: "Gradebook",
+    type: "sheets",
+    x: 1750, // Near the teacher desk
+    y: 1450,
+    color: "bg-emerald-700",
+    icon: Sheet,
+    interactionRadius: 60,
+    description: "Export Grades to Sheets"
+  }
+];
+
+export const WALLS = [];
+
+// ✅ TEACHER RBAC CONFIG
+export const TEACHER_IDS = [
+  "bristolrabbit720@gmail.com", 
+];
+
+export const isTeacher = (email?: string | null) => {
+  if (!email) return false;
+  return TEACHER_IDS.includes(email);
+};
+
+
+================================================
+FILE: lib/google-workspace.ts
+================================================
+// Helper to fetch data from Google APIs
+export const GoogleWorkspace = {
+  // 1. CLASSROOM
+  getCourses: async (token: string) => {
+    const res = await fetch("https://classroom.googleapis.com/v1/courses?courseStates=ACTIVE", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await res.json();
+  },
+
+  getCourseWork: async (token: string, courseId: string) => {
+    const res = await fetch(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await res.json();
+  },
+
+  // 2. CALENDAR
+  getEvents: async (token: string) => {
+    // Get events for the next 7 days
+    const now = new Date().toISOString();
+    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    
+    const res = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now}&timeMax=${nextWeek}&orderBy=startTime&singleEvents=true`, 
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return await res.json();
+  },
+
+  // 3. SHEETS (For Teacher Gradebook export)
+  readSheet: async (token: string, spreadsheetId: string, range: string) => {
+    const res = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return await res.json();
+  },
+
+  createEvent: async (token: string, event: { summary: string; description: string; start: string; end: string }) => {
+    const res = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/primary/events`, 
+      { 
+        method: "POST",
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          summary: event.summary,
+          description: event.description,
+          start: { dateTime: event.start },
+          end: { dateTime: event.end }
+        })
+      }
+    );
+    return await res.json();
+  },
+
+  // 🟢 NEW: Create Coursework (Assignment)
+  createAssignment: async (token: string, courseId: string, work: { title: string; description: string }) => {
+    const res = await fetch(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`, {
+      method: "POST",
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: work.title,
+        description: work.description,
+        workType: "ASSIGNMENT",
+        state: "PUBLISHED", // Immediately publish
+      })
+    });
+    return await res.json();
+  }
+};
+
+
+================================================
+FILE: lib/types.ts
+================================================
+[Empty file]
+
+
+================================================
+FILE: lib/useSpriteAnimator.ts
+================================================
+import { useState, useEffect, useRef } from 'react';
+
+export function useSpriteAnimator(
+  isMoving: boolean, 
+  facing: 'left' | 'right' | 'up' | 'down', 
+  speed: number = 150
+) {
+  const [frame, setFrame] = useState(0);
+  
+  // FIX 1: Change <number> to <number | undefined> and pass (undefined) as initial value
+  const requestRef = useRef<number | undefined>(undefined);
+  const previousTimeRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    const animate = (time: number) => {
+      if (previousTimeRef.current !== undefined) {
+        const deltaTime = time - previousTimeRef.current;
+        
+        // Only cycle frames if moving
+        if (isMoving && deltaTime > speed) {
+          setFrame((prev) => (prev + 1) % 4); 
+          previousTimeRef.current = time;
+        }
+      } else {
+        previousTimeRef.current = time;
+      }
+      
+      if (isMoving) {
+        requestRef.current = requestAnimationFrame(animate);
+      } else {
+        setFrame(0); // Reset to standing pose
+      }
+    };
+
+    if (isMoving) {
+      requestRef.current = requestAnimationFrame(animate);
+    } else {
+      setFrame(0); // Reset immediately if stopped
+    }
+
+    return () => {
+      // FIX 2: Check for undefined before cancelling
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
+  }, [isMoving, speed]);
+
+// ... imports ...
+
+// ... inside the hook ...
+
+  const getRow = () => {
+    switch(facing) {
+      case 'down': return 0;
+      case 'left': return 1;
+      case 'right': return 2;
+      case 'up': return 3;
+      default: return 0;
+    }
+  };
+
+  // !!! CRITICAL MATH FIX !!!
+  // Frame width must match FRAME_W from Player.tsx (16)
+  // Row height must match FRAME_H from Player.tsx (16)
+  return { 
+    backgroundPosition: `-${frame * 16}px -${getRow() * 16}px` 
+  };
+}
+
+
+================================================
+FILE: lib/utils.ts
+================================================
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+
